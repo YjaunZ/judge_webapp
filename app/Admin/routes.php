@@ -16,4 +16,5 @@ Route::group([
     $router->get('/', 'HomeController@index')->name('home');
     $router->resource('company', CompanyController::class);
     $router->resource('judge', JudgeController::class);
+    $router->resource('total', DataController::class);
 });

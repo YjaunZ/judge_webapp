@@ -9,7 +9,7 @@ use Encore\Admin\Grid;
 
 class JudgeController extends AdminController
 {
-    protected $title = '评分人管理';
+    protected $title = '评分管理';
 
     protected function grid()
     {
