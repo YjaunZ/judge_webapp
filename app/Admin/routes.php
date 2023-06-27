@@ -1,7 +1,9 @@
 <?php
 
 use App\Admin\Controllers\CompanyController;
+use App\Admin\Controllers\DataController;
 use App\Admin\Controllers\JudgeController;
+use App\Admin\Controllers\TaskController;
 use Illuminate\Routing\Router;
 
 Admin::routes();
@@ -14,7 +16,9 @@ Route::group([
 ], function (Router $router) {
 
     $router->get('/', 'HomeController@index')->name('home');
+    $router->resource('task', TaskController::class);
     $router->resource('company', CompanyController::class);
     $router->resource('judge', JudgeController::class);
     $router->resource('total', DataController::class);
+
 });
