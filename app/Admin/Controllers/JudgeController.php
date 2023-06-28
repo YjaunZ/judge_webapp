@@ -20,7 +20,7 @@ class JudgeController extends AdminController
         $grid->column('id', __('ID'))->sortable();
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
-        $grid->column('task.finished_signal','结束标志');
+        $grid->column('tasks.finished_signal','结束标志');
         $grid->filter(function($filter){
             // 去掉默认的id过滤器
             $filter->disableIdFilter();
@@ -31,6 +31,9 @@ class JudgeController extends AdminController
                 1    => '已完成',
             ]);
         });
+
+        $grid->disableCreateButton();
+
 
         return $grid;
     }
