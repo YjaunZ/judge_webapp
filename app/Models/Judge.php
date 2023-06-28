@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+//use Encore\Admin\Grid\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 
 class Judge extends Model
 {

@@ -6,6 +6,7 @@ use App\Models\Judge;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
+use Encore\Admin\Show;
 
 class JudgeController extends AdminController
 {
@@ -16,9 +17,10 @@ class JudgeController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Judge);
-        $grid->column('id', __('ID'))->sortable();
+        $grid->column('task_id', __('ID'))->sortable();
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
+        $grid->column('tasks.finished_signal','结束标志');
 
         return $grid;
     }
@@ -157,13 +159,22 @@ class JudgeController extends AdminController
 
         });
 
-
-
-
-
-
-
         return $form;
+    }
+    protected function detail($task_id)
+    {
+        $show = new Show(Judge::query()->findOrFail($task_id));
+
+        $show->field('task_id', 'ID');
+        $show->field('judge_appoint', '打分人id');
+        $show->field('created_at');
+        $show->field('updated_at');
+
+        $show->panel()
+            ->tools(function ($tools) {
+                $tools->disableDelete();
+            });;
+        return $show;
     }
 
 }
