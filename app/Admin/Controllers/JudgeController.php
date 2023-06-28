@@ -17,10 +17,20 @@ class JudgeController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Judge);
-        $grid->column('task_id', __('ID'))->sortable();
+        $grid->column('id', __('ID'))->sortable();
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
-        $grid->column('tasks.finished_signal','结束标志');
+        $grid->column('task.finished_signal','结束标志');
+        $grid->filter(function($filter){
+            // 去掉默认的id过滤器
+            $filter->disableIdFilter();
+            // 在这里添加字段过滤器
+            $filter->equal('任务是否完成')->radio([
+                ''   => '全部',
+                0    => '未完成',
+                1    => '已完成',
+            ]);
+        });
 
         return $grid;
     }
@@ -28,6 +38,23 @@ class JudgeController extends AdminController
     {
 
         $form = new Form(new Judge);
+//        $form = new Form(Judge::query()->findOrFail($id));
+
+        $form->tools(function (Form\Tools $tools) {
+
+            // 去掉`列表`按钮
+            $tools->disableList();
+
+            // 去掉`删除`按钮
+            $tools->disableDelete();
+
+            // 去掉`查看`按钮
+            $tools->disableView();
+
+            // 添加一个按钮, 参数可以是字符串, 或者实现了Renderable或Htmlable接口的对象实例
+            $tools->add('<a class="btn btn-sm btn-danger"><i class="fa fa-trash"></i>&nbsp;&nbsp;delete</a>');
+        });
+
 
         $form->number('check_1_1','数据安全管理机构得分')->required()->placeholder("请打分")
             ->min(0)
@@ -149,15 +176,15 @@ class JudgeController extends AdminController
             ->max(5);
 
 
-        $form->footer(function ($footer) {
-            // 去掉`查看`checkbox
-            $footer->disableViewCheck();
-            // 去掉`继续编辑`checkbox
-            $footer->disableEditingCheck();
-            // 去掉`继续创建`checkbox
-            $footer->disableCreatingCheck();
-
-        });
+//        $form->footer(function ($footer) {
+//            // 去掉`查看`checkbox
+//            $footer->disableViewCheck();
+//            // 去掉`继续编辑`checkbox
+//            $footer->disableEditingCheck();
+//            // 去掉`继续创建`checkbox
+//            $footer->disableCreatingCheck();
+//
+//        });
 
         return $form;
     }
@@ -165,7 +192,7 @@ class JudgeController extends AdminController
     {
         $show = new Show(Judge::query()->findOrFail($task_id));
 
-        $show->field('task_id', 'ID');
+        $show->field('id', 'ID');
         $show->field('judge_appoint', '打分人id');
         $show->field('created_at');
         $show->field('updated_at');
