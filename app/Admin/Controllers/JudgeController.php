@@ -4,19 +4,28 @@ namespace App\Admin\Controllers;
 
 use App\Models\Judge;
 use Encore\Admin\Controllers\AdminController;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Illuminate\Support\Facades\DB;
 
 class JudgeController extends AdminController
 {
     protected $title = '评分管理';
-
+    public function setSignalFinished()
+    {
+        $res = DB::table('tasks')->where('id', '=', '');
+    }
 
     //需要筛选打分完成与否
     protected function grid()
     {
+        $userId = Admin::user()->id;
+
         $grid = new Grid(new Judge);
+        $grid->disableActions();
+
         $grid->column('task_id', __('ID'))->sortable();
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
@@ -25,6 +34,8 @@ class JudgeController extends AdminController
             else if($finished_signal == 0) return '未完成';
             else return '无';
         });;
+//        $grid->column('title')->editable();
+
         $grid->filter(function($filter){
             // 去掉默认的id过滤器
             $filter->disableIdFilter();
@@ -37,19 +48,18 @@ class JudgeController extends AdminController
         });
 
 
-
-
         return $grid;
     }
     protected function form()
     {
-
-
         $form = new Form(new Judge);
+        $shopId = request()->route()->parameter('shop');
+        $form->setAction('admin/users');
 //        $form = new Form(Judge::query()->findOrFail($id));
 
 //        echo $form->isCreating();
-
+//        $id = Admin::user()->id;
+//        $form->edit($id);
         $form->number('check_1_1','数据安全管理机构得分')->required()->placeholder("请打分")
             ->min(0)
             ->max(2);
@@ -177,7 +187,6 @@ class JudgeController extends AdminController
         $form->tools(function (Form\Tools $tools) {
             $tools->disableDelete();
             $tools->disableView();
-            $tools->disableList();
         });
 
         return $form;
