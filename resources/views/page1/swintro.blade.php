@@ -14,5 +14,5 @@
     }
 </style>
 <div class = "swintro">
-    本软件版权由启正科技所有。本软件基于laraveladmin@https://laravel-admin.org/二次开发，在此感谢各开源项目的作者们。本软件同样遵守MIT开源协议，源码请联系作者yjaun@erickzqy@outlook.com索取。
+    本软件版权由启正科技所有。本软件基于laraveladmin@https://laravel-admin.org/二次开发，在此感谢各开源项目的作者们。本软件同样遵守MIT开源协议，源码请联系作者yjaun@erickzqy@outlook.com获取。
 </div>

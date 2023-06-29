@@ -15,5 +15,6 @@ class Judge extends Model
     public function tasks()
     {
         return $this->belongsTo(Task::class,'id', 'task_id');
+
     }
 }

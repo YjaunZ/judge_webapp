@@ -17,10 +17,14 @@ class JudgeController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Judge);
-        $grid->column('id', __('ID'))->sortable();
+        $grid->column('task_id', __('ID'))->sortable();
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
-        $grid->column('tasks.finished_signal','结束标志');
+        $grid->column('tasks.finished_signal','是否完成')->display(function ($finished_signal){
+            if($finished_signal == 1) return '完成';
+            else if($finished_signal == 0) return '未完成';
+            else return '无';
+        });;
         $grid->filter(function($filter){
             // 去掉默认的id过滤器
             $filter->disableIdFilter();
@@ -32,7 +36,7 @@ class JudgeController extends AdminController
             ]);
         });
 
-        $grid->disableCreateButton();
+
 
 
         return $grid;
@@ -40,24 +44,11 @@ class JudgeController extends AdminController
     protected function form()
     {
 
+
         $form = new Form(new Judge);
 //        $form = new Form(Judge::query()->findOrFail($id));
 
-        $form->tools(function (Form\Tools $tools) {
-
-            // 去掉`列表`按钮
-            $tools->disableList();
-
-            // 去掉`删除`按钮
-            $tools->disableDelete();
-
-            // 去掉`查看`按钮
-            $tools->disableView();
-
-            // 添加一个按钮, 参数可以是字符串, 或者实现了Renderable或Htmlable接口的对象实例
-            $tools->add('<a class="btn btn-sm btn-danger"><i class="fa fa-trash"></i>&nbsp;&nbsp;delete</a>');
-        });
-
+//        echo $form->isCreating();
 
         $form->number('check_1_1','数据安全管理机构得分')->required()->placeholder("请打分")
             ->min(0)
@@ -177,17 +168,17 @@ class JudgeController extends AdminController
         $form->number('check_5_14','安全意识培训')->required()->placeholder("请打分")
             ->min(0)
             ->max(5);
+        $form->disableEditingCheck();
 
+        $form->disableCreatingCheck();
 
-//        $form->footer(function ($footer) {
-//            // 去掉`查看`checkbox
-//            $footer->disableViewCheck();
-//            // 去掉`继续编辑`checkbox
-//            $footer->disableEditingCheck();
-//            // 去掉`继续创建`checkbox
-//            $footer->disableCreatingCheck();
-//
-//        });
+        $form->disableViewCheck();
+
+        $form->tools(function (Form\Tools $tools) {
+            $tools->disableDelete();
+            $tools->disableView();
+            $tools->disableList();
+        });
 
         return $form;
     }
@@ -199,9 +190,9 @@ class JudgeController extends AdminController
         $show->field('judge_appoint', '打分人id');
         $show->field('created_at');
         $show->field('updated_at');
-
         $show->panel()
             ->tools(function ($tools) {
+                $tools->disableList();
                 $tools->disableDelete();
             });;
         return $show;

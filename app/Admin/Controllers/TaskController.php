@@ -7,7 +7,6 @@ use App\Models\Task;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
-use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use Illuminate\Support\Facades\DB;
 
@@ -61,7 +60,7 @@ class TaskController extends AdminController
 //        $arr_new = array();
         for($i = 0; 2*$i < count($arr); $i++)
         {
-            $arr_new[2*$i] = $arr[2*$i+1];
+            $arr_new[2*($i+1)] = $arr[2*$i+1];
         }
 
 //        array_shift($arr_new);
@@ -86,18 +85,15 @@ class TaskController extends AdminController
         $show = new Show(Task::query()->findOrFail($id));
 
         $show->field('id', 'ID');
-        $show->field('title', '标题');
-        $show->field('content', '内容');
-        $show->field('rate');
         $show->field('created_at');
         $show->field('updated_at');
-        $show->field('release_at');
-        $show->panel()
-            ->tools(function ($tools) {
-                $tools->disableEdit();
-                $tools->disableList();
-                $tools->disableDelete();
-            });;
+        $show->field('finished_signal', '完成标志位');
+        $show->panel();
+//            ->tools(function ($tools) {
+//                $tools->disableEdit();
+//                $tools->disableList();
+//                $tools->disableDelete();
+//            });;
         return $show;
     }
 
