@@ -13,16 +13,16 @@ use Illuminate\Support\Facades\DB;
 class JudgeController extends AdminController
 {
     protected $title = '评分管理';
-    public function setSignalFinished()
+    public function setSignalFinished($id)
     {
-        $res = DB::table('tasks')->where('id', '=', '');
+        $status = DB::table('tasks')->where('id', '=', $id)
+        ->update(['finished_signal' => 1]);
+        dump($status);
     }
 
     //需要筛选打分完成与否
     protected function grid()
     {
-        $userId = Admin::user()->id;
-
         $grid = new Grid(new Judge);
         $grid->disableCreateButton();
         $grid->disableExport();
@@ -182,24 +182,26 @@ class JudgeController extends AdminController
         $form->number('check_5_14','安全意识培训')->required()->placeholder("请打分")
             ->min(0)
             ->max(5);
+
         $form->disableEditingCheck();
-
         $form->disableCreatingCheck();
-
         $form->disableViewCheck();
-
         $form->tools(function (Form\Tools $tools) {
             $tools->disableDelete();
             $tools->disableView();
         });
-
+        //保存后回调
+        $form->saved(function (Form $form) {
+            $id = $form->model()->id;
+            $this->setSignalFinished($id);
+        });
         return $form;
     }
     protected function detail($id)
     {
         $show = new Show(Judge::query()->findOrFail($id));
 
-        $show->field('task_id', 'ID');
+        $show->field('id', 'ID');
         $show->field('judge_appoint', '打分人id');
         $show->field('created_at');
         $show->field('updated_at');
