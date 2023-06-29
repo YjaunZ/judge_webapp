@@ -14,7 +14,7 @@ class Judge extends Model
     protected $table = 'judges';
     public function tasks()
     {
-        return $this->belongsTo(Task::class,'id', 'task_id');
+        return $this->belongsTo(Task::class,'id', 'id');
 
     }
 }

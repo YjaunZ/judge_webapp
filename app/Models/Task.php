@@ -13,6 +13,6 @@ class Task extends Model
     protected $table = 'tasks';
     public function judges()
     {
-        return $this->hasOne(Judge::class, 'task_id', 'id');
+        return $this->hasOne(Judge::class, 'id', 'id');
     }
 }

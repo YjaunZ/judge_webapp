@@ -24,7 +24,12 @@ class JudgeController extends AdminController
         $userId = Admin::user()->id;
 
         $grid = new Grid(new Judge);
-        $grid->disableActions();
+        $grid->disableCreateButton();
+        $grid->disableExport();
+        $grid->actions(function ($actions) {
+            $actions->disableDelete();
+            $actions->disableView();
+        });
 
         $grid->column('task_id', __('ID'))->sortable();
         $grid->column('created_at', __('Created at'));
@@ -53,13 +58,12 @@ class JudgeController extends AdminController
     protected function form()
     {
         $form = new Form(new Judge);
-        $shopId = request()->route()->parameter('shop');
-        $form->setAction('admin/users');
 //        $form = new Form(Judge::query()->findOrFail($id));
 
 //        echo $form->isCreating();
 //        $id = Admin::user()->id;
 //        $form->edit($id);
+
         $form->number('check_1_1','数据安全管理机构得分')->required()->placeholder("请打分")
             ->min(0)
             ->max(2);
@@ -191,11 +195,11 @@ class JudgeController extends AdminController
 
         return $form;
     }
-    protected function detail($task_id)
+    protected function detail($id)
     {
-        $show = new Show(Judge::query()->findOrFail($task_id));
+        $show = new Show(Judge::query()->findOrFail($id));
 
-        $show->field('id', 'ID');
+        $show->field('task_id', 'ID');
         $show->field('judge_appoint', '打分人id');
         $show->field('created_at');
         $show->field('updated_at');

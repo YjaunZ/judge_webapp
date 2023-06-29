@@ -10,17 +10,20 @@ use Encore\Admin\Show;
 
 class CompanyController extends AdminController{
     protected $title = '企业管理';
-
-    protected function detail($id): Show
+    protected function detail($id)
     {
-        $show = new Show(Company::findOrFail($id));
-        $show->field('name', '公司名称');
-        $show->field('email', '公司邮箱');
-        $show->field('type','公司类型');
-        $show->field('address','公司地址');
+        $show = new Show(Company::query()->findOrFail($id));
+
+        $show->field('id', 'ID');
         $show->field('created_at');
         $show->field('updated_at');
-        $show->field('release_at');
+        $show->field('finished_signal', '完成标志位');
+        $show->panel();
+//            ->tools(function ($tools) {
+//                $tools->disableEdit();
+//                $tools->disableList();
+//                $tools->disableDelete();
+//            });;
         return $show;
     }
     protected function grid()
