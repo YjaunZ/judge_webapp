@@ -31,9 +31,9 @@ class JudgeController extends AdminController
             $actions->disableView();
         });
 
-        $grid->column('task_id', __('ID'))->sortable();
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->column('id', __('ID'))->sortable();
+        $grid->column('created_at', __('创建时间'));
+        $grid->column('updated_at', __('更新时间'));
         $grid->column('tasks.finished_signal','是否完成')->display(function ($finished_signal){
             if($finished_signal == 1) return '完成';
             else if($finished_signal == 0) return '未完成';

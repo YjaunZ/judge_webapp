@@ -17,6 +17,7 @@ class TaskController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Task);
+        $grid->column('id', __('ID'))->sortable();
         $grid->column('created_at', __('创建时间'));
         $grid->column('judges.judge_appoint', __('分配打分员id'));
         $grid->column('finished_signal', '是否完成')->display(function ($finished_signal){
@@ -34,6 +35,17 @@ class TaskController extends AdminController
                 1    => '已完成',
             ]);
         });
+        $grid->export(function ($export) {
+            $export->filename('任务完成情况表.csv');
+            $export->except(['column1', 'column2' ]);
+            $export->only(['column3', 'column4' ]);
+            $export->originalValue(['column1', 'column2']);
+            $export->column('column_5', function ($value, $original)
+            {
+                return $value;
+            });
+        });
+
         return $grid;
     }
 

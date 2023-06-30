@@ -29,8 +29,10 @@ class CompanyController extends AdminController{
     protected function grid()
     {
         $grid = new Grid(new Company);
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->column('name', __('公司名称'))->sortable();
+        $grid->column('email', __('公司邮箱'))->sortable();
+        $grid->column('created_at', __('创建时间'));
+        $grid->column('updated_at', __('更新时间'));
 
         return $grid;
     }
