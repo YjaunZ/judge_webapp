@@ -15,4 +15,8 @@ class Task extends Model
     {
         return $this->hasOne(Judge::class, 'id', 'id');
     }
+    public function softwares()
+    {
+        return $this->belongsTo(Software::class, 'id', 'software_id');
+    }
 }

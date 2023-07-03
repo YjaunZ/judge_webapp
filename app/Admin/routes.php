@@ -3,6 +3,7 @@
 use App\Admin\Controllers\CompanyController;
 use App\Admin\Controllers\DataController;
 use App\Admin\Controllers\JudgeController;
+use App\Admin\Controllers\SoftwareController;
 use App\Admin\Controllers\TaskController;
 use App\Admin\Controllers\JudgeSubmitController;
 use Illuminate\Routing\Router;
@@ -21,6 +22,5 @@ Route::group([
     $router->resource('company', CompanyController::class);
     $router->resource('judge', JudgeController::class);
     $router->resource('total', DataController::class);
-    $router->resource('company/point', JudgeSubmitController::class);
-
+    $router->resource('software', SoftwareController::class);
 });

@@ -17,4 +17,9 @@ class Judge extends Model
         return $this->belongsTo(Task::class,'id', 'id');
 
     }
+    //评分表和系统信息表一对一
+    public function softwares()
+    {
+        return $this->belongsTo(Software::class,'id', 'software_id');
+    }
 }

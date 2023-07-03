@@ -7,9 +7,32 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Illuminate\Support\Facades\DB;
 
 class CompanyController extends AdminController{
     protected $title = '企业管理';
+
+    //获取企业列表
+    public function getCompanyList()
+    {
+        $companylist = DB::table('admin_role_users')
+            ->join('admin_users','admin_role_users.user_id', '=', 'admin_users.id')
+            ->join('admin_roles', 'admin_role_users.role_id', '=', 'admin_roles.id')
+            ->select('admin_users.id','admin_users.name')
+            ->where('admin_role_users.role_id','=','2')
+            ->get();
+        $temp = $companylist->toArray();
+        $arr = [];
+        for($key = 0; $key < count($temp); $key++)
+        {
+            array_push($arr, $temp[$key]->id, $temp[$key]->name);
+        }
+        for($i = 0; 2*$i < count($arr); $i++)
+        {
+            $arr_new[2*($i+1)] = $arr[2*$i+1];
+        }
+        return $arr_new;
+    }
     protected function detail($id)
     {
         $show = new Show(Company::query()->findOrFail($id));
@@ -40,19 +63,8 @@ class CompanyController extends AdminController{
     protected function form()
     {
         $form = new Form(new Company);
-        $form->text('account', '企业登陆名称')->rules('required|min:6',[
-            'required'=>'此空为必填项',
-            'min'=>'登陆名至少为6位']);
-
-        //regex:/[\u4e00-\u9fa5]/
-        $form->text('name', '企业名称')->rules('required|min:4',[
-            'required'=>'此空为必填项',
-            'min'=>'至少为四个字符'
-        ]);
-        $form->text('email', '邮箱')->rules('required|regex:/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/',[
-            'required'=>'此空为必填项',
-            'regex'=>'邮箱格式不正确，请检查'
-        ]);
+        $list = $this->getCompanyList();
+        $form->select('name', '企业名称')->required()->options($list);
         $type = [
             1 => '党委机关',
             2 => '政府机关',

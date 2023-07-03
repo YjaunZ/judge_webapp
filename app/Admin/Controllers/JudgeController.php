@@ -4,7 +4,6 @@ namespace App\Admin\Controllers;
 
 use App\Models\Judge;
 use Encore\Admin\Controllers\AdminController;
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
@@ -194,8 +193,23 @@ class JudgeController extends AdminController
         $form->saved(function (Form $form) {
             $id = $form->model()->id;
             $this->setSignalFinished($id);
+            //计算总分填入grade。
+            $this->setGrade($id);
         });
         return $form;
+    }
+    public function setGrade($id)
+    {
+        $total = DB::table('judges')
+            ->select(DB::raw('(check_1_1+check_1_2+check_1_3+check_2_1+check_2_2+check_2_3+check_2_4+check_2_5+check_2_6+check_2_7+check_3_1+check_3_2+check_3_3+check_4_1+check_4_2+check_4_3+check_4_4+check_4_5+check_4_6+check_4_7+check_4_8+check_4_9+check_4_10+check_4_11+check_5_1+check_5_2+check_5_3+check_5_4+check_5_5+check_5_6+check_5_7+check_5_8+check_5_9+check_5_10+check_5_11+check_5_12+check_5_13+check_5_14) as total'))
+            ->where('id','=',$id)
+            ->get()
+            ->toArray();
+        $grade = $total[0];
+        $status = DB::table('judges')
+            ->where('id', '=', $id)
+            ->update(['grade' => $grade->total]);
+        dump($status);
     }
     protected function detail($id)
     {
