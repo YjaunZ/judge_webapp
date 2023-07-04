@@ -206,10 +206,12 @@ class JudgeController extends AdminController
             ->get()
             ->toArray();
         $grade = $total[0];
-        $status = DB::table('judges')
+        $status1 = DB::table('judges')
             ->where('id', '=', $id)
             ->update(['grade' => $grade->total]);
-        dump($status);
+//        $status2 = DB::table('softwares')
+//            ->where
+        dump($status1);
     }
     protected function detail($id)
     {

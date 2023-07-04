@@ -57,16 +57,20 @@ class SoftwareController extends AdminController
     }
     protected function detail($id)
     {
+        $list = $this->getCompanyList();
         $show = new Show(Software::query()->findOrFail($id));
         $show->field('id', 'ID');
         $show->field('systemname', '系统名称');
-        $show->field('build_company', '承建公司');
-        $show->field('run_company', '运维公司');
-        $show->field('user_belong','用户范围');
+        $show->field('build_company', '承建公司ID')->using($list);
+        $show->field('run_company', '运维公司ID')->using($list);
+        $show->field('user_belong','用户范围')->using([
+            0=>'本部门',
+            1=>'本行业'
+        ]);
         $show->field('func','系统业务功能');
         $show->field('grade', '得分');
 
-
+        return $show;
 
     }
 }

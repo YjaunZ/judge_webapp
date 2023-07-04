@@ -16,10 +16,11 @@ class TaskController extends AdminController
 
     protected function grid()
     {
+        $list = $this->getUserList();
         $grid = new Grid(new Task);
         $grid->column('id', __('ID'))->sortable();
         $grid->column('created_at', __('创建时间'));
-        $grid->column('judges.judge_appoint', __('分配打分员id'));
+        $grid->column('judges.judge_appoint', __('分配打分员'))->using($list);
         $grid->column('finished_signal', '是否完成')->display(function ($finished_signal){
             if($finished_signal == 1) return '完成';
             else if($finished_signal == 0) return '未完成';
@@ -78,7 +79,23 @@ class TaskController extends AdminController
 //        array_shift($arr_new);
         return $arr_new;
     }
-
+    public function getSoftwareInfo()
+    {
+        $software_info = DB::table('softwares')
+            ->select('id', 'systemname')
+            ->get()
+            ->toArray();
+        $arr = [];
+        for($i = 0; $i < count($software_info); $i++){
+            array_push($arr, $software_info[$i]->id, $software_info[$i]->systemname);
+        }
+        $arr_new = [];
+        for($i = 0; 2*$i < count($arr); $i++)
+        {
+            $arr_new[2*($i+1)] = $arr[2*$i+1];
+        }
+        return $arr_new;
+    }
     protected function form()
     {
 //        $sign = [0=>'未完成', 1=>'已完成'];
@@ -88,6 +105,8 @@ class TaskController extends AdminController
         $list = $this->getUserList();
 //        array_shift($list);
         $form->select('judges.judge_appoint','选择打分员')->required()->options($list);
+        $list_software = $this->getSoftwareInfo();
+        $form->select('tasks.software_id','选择软件')->required()->options($list_software);
         return $form;
 
     }

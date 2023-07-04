@@ -10,7 +10,7 @@ use Encore\Admin\Show;
 use Illuminate\Support\Facades\DB;
 
 class CompanyController extends AdminController{
-    protected $title = '企业管理';
+    protected $title = '企业信息管理';
 
     //获取企业列表
     public function getCompanyList()
@@ -51,8 +51,9 @@ class CompanyController extends AdminController{
     }
     protected function grid()
     {
+        $list = $this->getCompanyList();
         $grid = new Grid(new Company);
-        $grid->column('name', __('公司名称'))->sortable();
+        $grid->column('name', __('公司名称'))->using($list)->sortable();
         $grid->column('email', __('公司邮箱'))->sortable();
         $grid->column('created_at', __('创建时间'));
         $grid->column('updated_at', __('更新时间'));
@@ -72,6 +73,9 @@ class CompanyController extends AdminController{
             4 => '企业',
             5 => '其他',
         ];
+        $form->text('email', '邮箱')->rules('required',[
+            'required' => '这是必填项'
+        ]);
         $form->select('type', '单位所属类型')->options($type)->rules('required',[
             'required' => '这是必填项'
         ]);
