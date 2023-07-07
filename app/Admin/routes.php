@@ -7,6 +7,7 @@ use App\Admin\Controllers\DataController;
 use App\Admin\Controllers\JudgeController;
 use App\Admin\Controllers\Setting;
 use App\Admin\Controllers\SoftwareController;
+use App\Admin\Controllers\SystemController;
 use App\Admin\Controllers\TaskController;
 use App\Admin\Controllers\JudgeSubmitController;
 use App\Models\PersonInfo;
@@ -30,7 +31,7 @@ Route::group([
     $router->resource('software', SoftwareController::class);
     $router->resource('check', CheckController::class);
     $router->resource('builder', BuilderController::class);
-    $router->resource('system',System::class);
+    $router->resource('system',SystemController::class);
     $router->resource('data',DataController::class);
     $router->resource('personinfo', PersonInfo::class);
 });
