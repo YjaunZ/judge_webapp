@@ -5,6 +5,7 @@ use App\Admin\Controllers\CheckController;
 use App\Admin\Controllers\CompanyController;
 use App\Admin\Controllers\DataController;
 use App\Admin\Controllers\JudgeController;
+use App\Admin\Controllers\PersonInfoController;
 use App\Admin\Controllers\Setting;
 use App\Admin\Controllers\SoftwareController;
 use App\Admin\Controllers\SystemController;
@@ -33,5 +34,5 @@ Route::group([
     $router->resource('builder', BuilderController::class);
     $router->resource('system',SystemController::class);
     $router->resource('data',DataController::class);
-    $router->resource('personinfo', PersonInfo::class);
+    $router->resource('personinfo', PersonInfoController::class);
 });
