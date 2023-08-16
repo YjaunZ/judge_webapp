@@ -22,10 +22,11 @@ class DataController extends AdminController{
         $form = new Form(new Data());
         $form -> text('data_name', '数据名称')->required();
         $form -> text('data_usage', '数据用途')->required();
-        $form -> text('data_total', '数据总量')->required();
+        $form -> text('data_total', '数据总量')->required()->help("请输入整数");
         $list = [
-            '是' => '是',
-            '否' => '否'
+            '0' => '',
+            '1' => '是',
+            '2' => '否',
         ];
         $form -> select('is_encrypc','数据是否加密')->options($list)->required();
         $form -> text('data_os', '涉及应用系统')->required();
@@ -36,7 +37,7 @@ class DataController extends AdminController{
         $form -> text('store_cycle','保存周期')->required();
         $form -> select('is_classified_protected', '是否分级分类保护')->options($list)->required();
         $form -> text('data_distribtion','数据分级')->required();
-        $form -> text('is_shared', '是否共享')->required();
+        $form -> select('is_shared', '是否共享')->options($list)->required();
         $form -> select('is_out_serect', '是否脱敏')->options($list)->required();
         $form -> select('is_build_destory','是否建立数据销毁制度')->options($list)->required();
 

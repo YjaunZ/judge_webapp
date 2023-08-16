@@ -35,7 +35,7 @@ class BuilderController extends AdminController{
         $form->text('service_num','业务系统数量');
         $form->text('office_num','办公系统数量');
         $form->text('website_num','网站数量');
-        $form->text('other_num','其他系统');
+        $form->text('other_num','其他系统数量');
 
         return $form;
     }

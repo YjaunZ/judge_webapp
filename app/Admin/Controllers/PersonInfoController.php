@@ -6,6 +6,7 @@ use App\Models\PersonInfo;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
+use App\Admin\Extensions\PostsExporter;
 
 class PersonInfoController extends AdminController{
     protected $title = '系统个人信息调研表';
@@ -15,6 +16,8 @@ class PersonInfoController extends AdminController{
         $grid -> column('person_info_id', 'ID');
         $grid -> column('info_type', '个人信息种类');
         $grid -> column('info_content', '内容');
+
+        $grid->exporter(new PostsExporter());
         return $grid;
     }
     public function form(){
@@ -24,13 +27,14 @@ class PersonInfoController extends AdminController{
         $form -> text('usage','用途')->required();
         $form -> text('data_total', '数据总量')->required();
         $list = [
-            '是' => '是',
-            '否' => '否'
+            '0' => '',
+            '1' => '是',
+            '2' => '否',
         ];
         $form -> select('is_encrypc', '是否加密')->required()->options($list);
         $form -> text('use_os', '涉及应用系统')->required();
         $form -> text('store_location', '存储位置')->required();
-        $form -> text('is_backup', '是否异地备份')->required();
+        $form -> select('is_backup', '是否异地备份')->required()->options($list);
         $form -> text('backup_way', '备份方式')->required();
         $form -> text('backup_cycle', '备份周期')->required();
         $form -> text('store_cycle', '保存周期')->required();
